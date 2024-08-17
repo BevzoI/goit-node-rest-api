@@ -27,6 +27,7 @@ app.use((err, req, res, next) => {
 try {
   await sequelize.authenticate();
   console.log("Database connection successful.");
+  await sequelize.sync();
   app.listen(3000, () => {
     console.log("Server is running. Use our API on port: 3000");
   });
