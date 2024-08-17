@@ -6,28 +6,29 @@ const Contact = sequelize.define("contacts", {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      len: [3, 100],
+      len: [3, 100], 
     },
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isEmail: true,
-      len: [3, 100],
+      isEmail: true, 
+      len: [3, 100], 
     },
   },
   phone: {
     type: DataTypes.STRING,
     allowNull: false,
-    validate: { min: 7 },
+    validate: {
+      len: [7, 20], 
+    },
   },
   favorite: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false,
+    defaultValue: false, 
   },
 });
 
-Contact.sync();
 
 export default Contact;
