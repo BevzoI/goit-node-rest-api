@@ -1,17 +1,30 @@
-import Contact from "../db/models/Contact.js";
+import Contact from "../db/models/contact.js";
 
-export const getContactById = (id) => Contact.findByPk(id);
-export const updateContact = async (id, data) => {
-  const contact = await getContactById(id);
-  if (!contact) {
-    return null;
-  }
-  return contact.update(data, {
-    returning: true,
-  });
+export const listContacts = async () => {
+  return await Contact.findAll();
 };
 
-export default {
-  getContactById,
-  updateContact,
+export const getContactById = async (id) => {
+  return await Contact.findByPk(id);
+};
+
+export const addContact = async (contactData) => {
+  return await Contact.create(contactData);
+};
+
+export const removeContact = async (id) => {
+  const contact = await Contact.findByPk(id);
+  if (!contact) return null;
+  await contact.destroy();
+  return contact;
+};
+
+export const updateContact = async (id, updateData) => {
+  const contact = await Contact.findByPk(id);
+  if (!contact) return null;
+  return await contact.update(updateData);
+};
+
+export const updateStatusContact = async (id, updateData) => {
+  return await updateContact(id, updateData);
 };
