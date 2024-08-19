@@ -66,9 +66,6 @@ RequestBody: {
   "password": "examplepassword"
 }
 
-
-
-
 Registration validation error
 
 Status: 400 Bad Request
@@ -77,9 +74,6 @@ ResponseBody: {
   "message": "Помилка від Joi або іншої бібліотеки валідації"
 }
 
-
-
-
 Registration conflict error
 
 Status: 409 Conflict
@@ -87,9 +81,6 @@ Content-Type: application/json
 ResponseBody: {
   "message": "Email in use"
 }
-
-
-
 
 Registration success response
 
@@ -101,8 +92,6 @@ ResponseBody: {
     "subscription": "starter"
   }
 }
-
-
 
 
 Логін
@@ -125,8 +114,6 @@ RequestBody: {
 }
 
 
-
-
 Login validation error
 
 Status: 400 Bad Request
@@ -134,9 +121,6 @@ Content-Type: application/json
 ResponseBody: {
   "message": "Помилка від Joi або іншої бібліотеки валідації"
 }
-
-
-
 
 Login success response
 
@@ -150,18 +134,12 @@ ResponseBody: {
   }
 }
 
-
-
-
 Login auth error
 
 Status: 401 Unauthorized
 ResponseBody: {
   "message": "Email or password is wrong"
 }
-
-
-
 
 Крок 3
 
@@ -183,9 +161,6 @@ Content-Type: application/json
 ResponseBody: {
   "message": "Not authorized"
 }
-
-
-
 
 Крок 4
 
