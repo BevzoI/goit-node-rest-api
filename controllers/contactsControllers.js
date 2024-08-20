@@ -43,7 +43,6 @@ export const deleteContact = async (req, res, next) => {
 
 export const createContact = async (req, res, next) => {
   try {
-    console.log("req.body: ", req.body);
     const { error } = createContactSchema.validate(req.body);
     if (error) throw HttpError(400, error.message);
 
@@ -55,19 +54,23 @@ export const createContact = async (req, res, next) => {
   }
 };
 
-export const updateContact = async (req, res) => {
-  if (JSON.stringify(req.body) === "{}") {
-    throw HttpError(400, "Body must have at least one field");
+export const updateContact = async (req, res, next) => {
+  try {
+    if (JSON.stringify(req.body) === "{}") {
+      return next(HttpError(404, "Body must have at least one field"));
+    }
+
+    const { id } = req.params;
+    const updatedContact = await contactsService.updateContact(id, req.body);
+
+    if (!updatedContact) {
+      return next(HttpError(404, "Contact not found"));
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    next(404, error);
   }
-
-  const { id } = req.params;
-  const updatedContact = await contactsService.updateContact(id, req.body);
-
-  if (!updatedContact) {
-    throw HttpError(404);
-  }
-
-  res.json(updatedContact);
 };
 
 
