@@ -2,11 +2,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../db/models/User.js";
 import HttpError from "../helpers/HttpError.js";
+import gravatar from "gravatar";
+import fs from 'fs/promises';
+import path from 'path';
 
 const { ENV_SECRET_KEY } = process.env;
 
 const SECRET_KEY = ENV_SECRET_KEY;
 
+// Реєстрація користувача
 export const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -25,17 +29,41 @@ export const register = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const avatarURL = gravatar.url(email, { s: '200', r: 'pg', d: 'mm' });
+
     const newUser = await User.create({
       email,
       password: hashedPassword,
+      avatarURL,
     });
 
     res.status(201).json({
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+        avatarURL: newUser.avatarURL,
       },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateAvatar = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { path: tempPath, originalname } = req.file;
+
+    const extension = path.extname(originalname);
+    const fileName = `${id}${extension}`;
+    const avatarPath = path.join('public', 'avatars', fileName);
+
+    await fs.rename(tempPath, avatarPath);
+
+    const avatarURL = `/avatars/${fileName}`;
+    await User.update({ avatarURL }, { where: { id } });
+
+    res.status(200).json({ avatarURL });
   } catch (error) {
     next(error);
   }
